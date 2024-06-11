@@ -5,6 +5,7 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from config import Config
 from database import init_db, insert_poll_response
+from azure_storage import AzureBlobStorage
 
 app = Flask(__name__)
 app.config.from_object(Config)
