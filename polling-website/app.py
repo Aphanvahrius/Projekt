@@ -5,13 +5,12 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from config import Config
 from database import init_db, insert_poll_response
+from azure_storage.py import AzureBlobStorage
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 app.config.from_object(Config)
 
-# Ensure the upload folder exists
-if not os.path.exists(app.config['UPLOAD_FOLDER']):
-    os.makedirs(app.config['UPLOAD_FOLDER'])
+azure_blob_storage = AzureBlobStorage(Config.AZURE_STORAGE_CONNECTION_STRING, Config.AZURE_STORAGE_CONTAINER_NAME)
 
 @app.route('/')
 def index():
@@ -26,24 +25,27 @@ def submit():
     building_type = request.form.getlist('building_type')
     environment_importance = request.form['environment_importance']
     opinion = request.form.get('opinion', '')
-    attachment = request.files['attachment']
-
-    # Handle file upload
-    if attachment:
-        filename = secure_filename(attachment.filename)
-        attachment.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    else:
-        filename = None
+        
+    # Azure storage
+    file_url = None
+    if 'attachment' in request.files:
+        file = request.files['attachment']
+        if file and file.filename != '':
+            file_url = azure_blob_storage.upload_file(file)
 
     # Insert data into the database
     try:
-        insert_poll_response(age, gender, education, support, building_type, environment_importance, opinion, filename)
+        insert_poll_response(age, gender, education, support, building_type, environment_importance, opinion, file_url)
         flash('Your response has been submitted successfully!', 'success')
     except Exception as e:
         flash(str(e), 'danger')
 
     return redirect('/')
 
-if __name__ == '__main__':
+@app.route('/init-db')
+def initialize_database():
     init_db()
+    return 'Database initialized!'
+
+if __name__ == '__main__':
     app.run(debug=True)

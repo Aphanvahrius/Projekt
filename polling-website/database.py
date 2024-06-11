@@ -40,8 +40,8 @@ def insert_poll_response(age, gender, education, support, building_type, environ
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("""
-    INSERT INTO poll_responses (age, gender, education, support, building_type, environment_importance, opinion, attachment)
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+        INSERT INTO poll_responses (age, gender, education, support, building_type, environment_importance, opinion, attachment)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
     """, (age, gender, education, support, ','.join(building_type), environment_importance, opinion, attachment))
     conn.commit()
     cursor.close()
