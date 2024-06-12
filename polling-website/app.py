@@ -41,7 +41,6 @@ def submit():
     # Insert data into the database
     try:
         insert_poll_response(age, gender, education, support, building_type, environment_importance, opinion, file_url)
-        insert_poll_response(age, gender, education, support, building_type, environment_importance, opinion, file_url)
         flash('Your response has been submitted successfully!', 'success')
     except Exception as e:
         flash(str(e), 'danger')
