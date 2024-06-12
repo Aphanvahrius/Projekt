@@ -7,15 +7,10 @@ from config import Config
 from database import init_db, insert_poll_response
 from azure_storage import AzureBlobStorage
 
-azure_blob_storage = AzureBlobStorage(Config.AZURE_STORAGE_CONNECTION_STRING, Config.AZURE_STORAGE_CONTAINER_NAME)
-azure_blob_storage = AzureBlobStorage(Config.AZURE_STORAGE_CONNECTION_STRING, Config.AZURE_STORAGE_CONTAINER_NAME)
-
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 app.config.from_object(Config)
 
-# Ensure the upload folder exists
-if not os.path.exists(app.config['UPLOAD_FOLDER']):
-    os.makedirs(app.config['UPLOAD_FOLDER'])
+azure_blob_storage = AzureBlobStorage(Config.AZURE_STORAGE_CONNECTION_STRING, Config.AZURE_STORAGE_CONTAINER_NAME)
 
 @app.route('/')
 def index():
