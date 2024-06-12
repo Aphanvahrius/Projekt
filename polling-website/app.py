@@ -5,6 +5,9 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from config import Config
 from database import init_db, insert_poll_response
+from azure_storage import AzureBlobStorage
+
+# azure_blob_storage = AzureBlobStorage(Config.AZURE_STORAGE_CONNECTION_STRING, Config.AZURE_STORAGE_CONTAINER_NAME)
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -34,6 +37,13 @@ def submit():
         attachment.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
     else:
         filename = None
+        
+#    file_url = None
+#    if 'attachment' in request.files:
+#        file = request.files['attachment']
+#        if file and file.filename != '':
+#            file_url = azure_blob_storage.upload_file(file)
+
 
     # Insert data into the database
     try:
