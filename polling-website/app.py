@@ -8,6 +8,7 @@ from database import init_db, insert_poll_response
 from azure_storage import AzureBlobStorage
 
 azure_blob_storage = AzureBlobStorage(Config.AZURE_STORAGE_CONNECTION_STRING, Config.AZURE_STORAGE_CONTAINER_NAME)
+azure_blob_storage = AzureBlobStorage(Config.AZURE_STORAGE_CONNECTION_STRING, Config.AZURE_STORAGE_CONTAINER_NAME)
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -39,6 +40,7 @@ def submit():
 
     # Insert data into the database
     try:
+        insert_poll_response(age, gender, education, support, building_type, environment_importance, opinion, file_url)
         insert_poll_response(age, gender, education, support, building_type, environment_importance, opinion, file_url)
         flash('Your response has been submitted successfully!', 'success')
     except Exception as e:
