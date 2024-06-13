@@ -1,6 +1,7 @@
 from azure.storage.blob import BlobServiceClient
 from werkzeug.utils import secure_filename
 import os
+import uuid
 
 class AzureBlobStorage:
     def __init__(self, connection_string, container_name):
@@ -8,6 +9,8 @@ class AzureBlobStorage:
         self.container_name = container_name
 
     def upload_file(self, file):
-        blob_client = self.blob_service_client.get_blob_client(container=self.container_name, blob=secure_filename(file.filename))
+        filename = secure_filename(file.filename)
+        unique_filename = f"{uuid.uuid4()}_{filename}"
+        blob_client = self.blob_service_client.get_blob_client(container=self.container_name, blob=unique_filename)
         blob_client.upload_blob(file.stream)
         return blob_client.url
