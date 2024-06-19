@@ -2,7 +2,6 @@ import psycopg2
 from config import Config
 
 def get_db_connection():
-    """Establish and return a database connection."""
     conn = psycopg2.connect(
         host=Config.DB_HOST,
         port=Config.DB_PORT,
@@ -13,7 +12,6 @@ def get_db_connection():
     return conn
 
 def init_db():
-    """Initialize the database and create necessary tables."""
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("""
@@ -35,7 +33,6 @@ def init_db():
     conn.close()
 
 def insert_poll_response(age, gender, education, support, building_type, environment_importance, opinion, attachment):
-    """Insert a poll response into the database."""
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("""
