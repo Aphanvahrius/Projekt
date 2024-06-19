@@ -1,12 +1,8 @@
 from flask import Flask, render_template, request, redirect, flash
-from werkzeug.utils import secure_filename
-import os
-import psycopg2
-from psycopg2.extras import RealDictCursor
 from config import Config
 from database import init_db, insert_poll_response
 from azure_storage import AzureBlobStorage
-from forms import PollForm  # Import the PollForm class
+from forms import PollForm
 
 app = Flask(__name__, static_url_path='/static')
 app.config.from_object(Config)
@@ -59,4 +55,5 @@ def submit():
         return render_template('index.html', form=form)
 
 if __name__ == '__main__':
+    init_db()
     app.run()

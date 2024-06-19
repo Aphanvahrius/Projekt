@@ -1,6 +1,5 @@
 from azure.storage.blob import BlobServiceClient
 from werkzeug.utils import secure_filename
-import os
 import uuid
 
 class AzureBlobStorage:

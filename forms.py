@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, SelectField, BooleanField, TextAreaField
+from wtforms import IntegerField, SelectField, BooleanField, TextAreaField
 from wtforms.validators import DataRequired, Length
 
 class PollForm(FlaskForm):
